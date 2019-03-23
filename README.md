@@ -46,8 +46,8 @@ ssh someinternalhost
 ### Pritunl VPN
 
 ```bash
- bastion_IP = 35.228.115.102
- someinternalhost_IP = 10.166.0.4
+bastion_IP = 35.228.115.102
+someinternalhost_IP = 10.166.0.4
 ```
 
 ![1553376399250](/data/git/mnsold-otus_infra/assets/1553376399250.png)
@@ -61,3 +61,4 @@ ssh someinternalhost
 ![1553376486833](/data/git/mnsold-otus_infra/assets/1553376486833.png)
 
 ![1553376337665](/data/git/mnsold-otus_infra/assets/1553376337665.png)
+
