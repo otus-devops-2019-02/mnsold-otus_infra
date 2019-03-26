@@ -62,3 +62,25 @@ someinternalhost_IP = 10.166.0.4
 
 ![1553376337665](/data/git/mnsold-otus_infra/assets/1553376337665.png)
 
+## ДЗ №6
+
+```bash
+testapp_IP = 35.198 .167.169
+testapp_port = 9292
+```
+
+
+
+## Создание ВМ startup-script
+
+```bash
+gcloud compute instances create reddit-app\
+  --boot-disk-size=10GB \
+  --image-family ubuntu-1604-lts \
+  --image-project=ubuntu-os-cloud \
+  --machine-type=g1-small \
+  --tags puma-server \
+  --restart-on-failure \
+  --metadata-from-file startup-script=cloud-bastion-VPN/startup.sh
+```
+
