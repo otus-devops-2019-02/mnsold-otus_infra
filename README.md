@@ -85,7 +85,7 @@ gcloud compute instances create reddit-app\
   --machine-type=g1-small \
   --tags puma-server \
   --restart-on-failure \
-  --metadata-from-file startup-script=cloud-bastion-VPN/startup.sh
+  --metadata-from-file startup-script=cloud-testapp/startup.sh
 ```
 
 - создание ВМ с опцией startup-script-url
@@ -100,7 +100,7 @@ gcloud compute instances create reddit-app\
   --machine-type=g1-small \
   --tags puma-server \
   --restart-on-failure \
-  --metadata startup-script-url=https://raw.githubusercontent.com/otus-devops-2019-02/mnsold-otus_infra/cloud-testapp/cloud-bastion-VPN/startup.sh
+  --metadata startup-script-url=https://raw.githubusercontent.com/otus-devops-2019-02/mnsold-otus_infra/cloud-testapp/cloud-testapp/startup.sh
 ```
 
 - создание правила firewall
