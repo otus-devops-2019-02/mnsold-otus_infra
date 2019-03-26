@@ -65,7 +65,7 @@ someinternalhost_IP = 10.166.0.4
 ## ДЗ №6
 
 ```bash
-testapp_IP = 35.198.167.169
+testapp_IP = 35.228.59.69
 testapp_port = 9292
 ```
 
