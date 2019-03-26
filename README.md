@@ -65,17 +65,13 @@ someinternalhost_IP = 10.166.0.4
 ## ДЗ №6
 
 ```bash
-testapp_IP = 35.198.167.169
+testapp_IP = 35.198 .167.169
 testapp_port = 9292
 ```
 
 
 
-## gcloud CMD
-
-- создание ВМ с опцией startup-script
-
-https://cloud.google.com/compute/docs/startupscript
+## Создание ВМ startup-script
 
 ```bash
 gcloud compute instances create reddit-app\
@@ -86,35 +82,5 @@ gcloud compute instances create reddit-app\
   --tags puma-server \
   --restart-on-failure \
   --metadata-from-file startup-script=cloud-bastion-VPN/startup.sh
-```
-
-- создание ВМ с опцией startup-script-url
-
-(не стал заливать скрипт в Google Storage, аля startup-script-url=gs://bucket/startup.sh, т.к. наиболее интерено как раз из гита брать последние версии скрипов)
-
-```
-gcloud compute instances create reddit-app\
-  --boot-disk-size=10GB \
-  --image-family ubuntu-1604-lts \
-  --image-project=ubuntu-os-cloud \
-  --machine-type=g1-small \
-  --tags puma-server \
-  --restart-on-failure \
-  --metadata startup-script-url=https://raw.githubusercontent.com/otus-devops-2019-02/mnsold-otus_infra/cloud-testapp/cloud-bastion-VPN/startup.sh
-```
-
-- создание правила firewall
-
-https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/create
-
-```bash
-gcloud compute firewall-rules create default-puma-server \
-	--direction=IN \
-	--rules=tcp:9292 \
-	--source-ranges=0.0.0.0/0 \
-	--action=ALLOW \
-	--priority=1000 \
-	--target-tags=puma-server \
-	--network=default
 ```
 
