@@ -1,0 +1,16 @@
+#/etc/systemd/system
+[Unit]
+Description=Reddit application
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=appuser
+WorkingDirectory=/home/appuser/reddit
+ExecStart=/usr/local/bin/puma --dir /home/appuser/reddit
+ExecStop=/usr/bin/pkill -TERM -f puma
+TimeoutStartSec=10
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target
