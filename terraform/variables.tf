@@ -34,5 +34,5 @@ variable reddit_pool_nodes {
   description = "Count nodes of reddiat app"
 
   # Значение по умолчанию
-  default = "2"
+  default = "1"
 }
