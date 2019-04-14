@@ -35,7 +35,9 @@ resource "google_compute_instance" "app" {
     network = "default"
 
     # использовать ephemeral IP для доступа из Интернет 
-    access_config {}
+    access_config {
+      nat_ip = "${google_compute_address.app_ip.address}"
+    }
   }
 
   metadata {
@@ -87,4 +89,22 @@ resource "google_compute_project_metadata" "default" {
     # путь до публичного ключа
     ssh-keys = "appuser1:${file(var.public_key_path)} appuser2:${file(var.public_key_path)}"
   }
+}
+
+resource "google_compute_firewall" "firewall_ssh" {
+  name = "default-allow-ssh"
+  network = "default"
+  description = "Terraform allow SSH from anywhere"
+
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
+resource "google_compute_address" "app_ip" { 
+  #IP для инстанса с приложением в виде внешнего ресурса
+  name = "reddit-app-ip" 
 }
