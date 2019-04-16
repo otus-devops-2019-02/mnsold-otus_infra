@@ -118,3 +118,22 @@ gcloud compute firewall-rules create default-puma-server \
 	--network=default
 ```
 
+# ДЗ №8
+
+
+
+## Задание со *
+
+- Добавьте в веб интерфейсе ssh ключ пользователю appuser_web в метаданные проекта. Выполните terraform
+  apply и проверьте результат Какие проблемы вы обнаружили? 
+
+При добавлении ssh-keys в интерфесе GCP и применени конфигурации `terraform apply`,  все доабвленные ssh ключи удаляются. Об этом прямо говорится в документации terraform в resorce `google_compute_project_metadata` https://www.terraform.io/docs/providers/google/r/compute_project_metadata.html#project , цитата:
+
+> **Note:**  This resource manages all project-level metadata including project-level ssh keys.
+> Keys unset in config but set on the server will be removed. If you want to manage only single key/value pairs within the project metadata rather than the entire set, then use [google_compute_project_metadata_item](https://www.terraform.io/docs/providers/google/r/compute_project_metadata_item.html).
+
+- Добавьте в код еще один terraform ресурс для нового инстанса приложения, например reddit-app2, добавьте его в
+  балансировщик ... Какие проблемы вы видите в такой конфигурации приложения?
+
+Дублирование кода, сложность поддержки, т.к. править придется во всех местах. Лучше использовать параметр conut при создании ресурса инстанса.
+
