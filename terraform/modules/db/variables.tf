@@ -10,7 +10,7 @@ variable zone {
   default = "europe-west1-b"
 }
 
-variable db_disk_image { 
-  description = "Disk image for reddit db" 
-  default = "reddit-db-base" 
+variable db_disk_image {
+  description = "Disk image for reddit db"
+  default     = "reddit-db-base"
 }

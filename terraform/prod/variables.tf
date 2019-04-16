@@ -30,12 +30,12 @@ variable zone {
   default = "europe-west1-b"
 }
 
-variable app_disk_image { 
-  description = "Disk image for reddit app" 
-  default = "reddit-app-base" 
+variable app_disk_image {
+  description = "Disk image for reddit app"
+  default     = "reddit-app-base"
 }
 
-variable db_disk_image { 
-  description = "Disk image for reddit db" 
-  default = "reddit-db-base" 
+variable db_disk_image {
+  description = "Disk image for reddit db"
+  default     = "reddit-db-base"
 }

@@ -7,7 +7,7 @@ provider "google" {
   # Версия провайдера
   version = "2.0.0"
   project = "${var.project}"
-  region = "${var.region}"
+  region  = "${var.region}"
 }
 
 module "app" {
@@ -15,8 +15,8 @@ module "app" {
   public_key_path = "${var.public_key_path}"
   zone            = "${var.zone}"
   app_disk_image  = "${var.app_disk_image}"
-} 
- 
+}
+
 module "db" {
   source          = "../modules/db"
   public_key_path = "${var.public_key_path}"
@@ -25,6 +25,6 @@ module "db" {
 }
 
 module "vpc" {
-  source          = "../modules/vpc"
+  source        = "../modules/vpc"
   source_ranges = ["0.0.0.0/0"]
 }
