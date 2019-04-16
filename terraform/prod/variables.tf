@@ -30,13 +30,6 @@ variable zone {
   default = "europe-west1-b"
 }
 
-variable reddit_pool_nodes {
-  description = "Count nodes of reddiat app"
-
-  # Значение по умолчанию
-  default = "1"
-}
-
 variable app_disk_image { 
   description = "Disk image for reddit app" 
   default = "reddit-app-base" 
