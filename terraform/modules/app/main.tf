@@ -26,6 +26,34 @@ resource "google_compute_instance" "app" {
     # путь до публичного ключа
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
+
+  connection {
+    type  = "ssh"
+    user  = "appuser"
+    agent = false
+
+    # путь до приватного ключа 
+    private_key = "${file(var.private_key_path)}"
+  }
+
+  provisioner "file" {
+    # юнит systemd
+    source      = "${path.module}/files/puma.service"
+    destination = "/tmp/puma.service"
+  }
+
+  provisioner "remote-exec" {
+    # формирование конфигурационнго файла из шаблона
+    inline = [
+      "echo ${data.template_file.puma_env.rendered} > /tmp/puma_env.sh",
+      "chmod a+x /tmp/puma_env.sh; /tmp/puma_env.sh",
+    ]
+  }
+
+  provisioner "remote-exec" {
+    # развертывание
+    script = "${path.module}/files/deploy.sh"
+  }
 }
 
 resource "google_compute_firewall" "firewall_puma" {
@@ -37,8 +65,7 @@ resource "google_compute_firewall" "firewall_puma" {
   # Какой доступ разрешить
   allow {
     protocol = "tcp"
-
-    ports = ["9292"]
+    ports    = ["9292"]
   }
 
   # Каким адресам разрешаем доступ
@@ -51,4 +78,13 @@ resource "google_compute_firewall" "firewall_puma" {
 resource "google_compute_address" "app_ip" {
   #IP для инстанса с приложением в виде внешнего ресурса
   name = "reddit-app-ip"
+}
+
+data "template_file" "puma_env" {
+  #шаблон для создания конфигурации puma.service
+  template = "${file("${path.module}/files/puma_env.tmpl.sh")}"
+
+  vars {
+    database_url = "${var.database_url}"
+  }
 }
