@@ -137,3 +137,20 @@ gcloud compute firewall-rules create default-puma-server \
 
 Дублирование кода, сложность поддержки, т.к. править придется во всех местах. Лучше использовать параметр conut при создании ресурса инстанса.
 
+# ДЗ №10
+
+Вопрос: Выполните  `ansible app -m command  -a  'rm  -rf ~/reddit'` и проверьте еще раз выполнение плейбука.  Что изменилось и почему?
+
+Командлй выше, был удален репозиторий, при повтором проигрывании пелйбука отработала задача по клонированию репы, вернулся статус задачи `changed=1`. Если проиграть еще раз плейбук, без выполнения комнды выше с `rm`, статус задачи будет 0 (если только клонируемый репозиторий не изменится).
+
+Пригодится по динамическому инвентори
+
+https://docs.ansible.com/ansible/latest/plugins/inventory.html#inventory-plugins
+
+https://docs.ansible.com/ansible/latest/user_guide/intro_dynamic_inventory.html
+
+https://cloud.google.com/compute/docs/instances/view-ip-address
+
+https://cloud.google.com/sdk/gcloud/reference/compute/instances/list
+
+https://cloud.google.com/sdk/gcloud/reference/topic/filters
