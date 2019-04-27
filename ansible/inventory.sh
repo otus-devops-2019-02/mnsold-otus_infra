@@ -11,7 +11,7 @@ DB_IP=$(gcloud compute instances describe 'reddit-db' --zone europe-west1-b --fo
 case $1 in
     --list)
         #IP
-        cat <<EOF
+        cat <<EOF > inventory.json
 {
     "db": {
         "hosts": ["reddit-db"]
@@ -31,5 +31,6 @@ case $1 in
     }
 }
 EOF
+    cat inventory.json
     ;;
 esac
