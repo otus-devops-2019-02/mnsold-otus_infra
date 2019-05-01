@@ -10,3 +10,6 @@ packer/variables.json
 
 # ansible
 *.retry
+
+# others
+secure/

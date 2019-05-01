@@ -154,3 +154,68 @@ https://cloud.google.com/compute/docs/instances/view-ip-address
 https://cloud.google.com/sdk/gcloud/reference/compute/instances/list
 
 https://cloud.google.com/sdk/gcloud/reference/topic/filters
+
+
+
+# ДЗ №11
+
+Установка плагина GCE
+
+https://docs.ansible.com/ansible/latest/scenario_guides/guide_gce.html
+
+- Создать сервисный аккаунт, скачать закрытый ключ в формате JSON
+- Добавить файл  закрытого ключа в формате JSON в `.gitignore`
+
+- установить `pip install requests google-auth`
+
+```bash
+pip install requests google-auth
+...
+Installing collected packages: urllib3, certifi, chardet, idna, requests, cachetools, six, pyasn1, pyasn1-modules, rsa, google-auth
+
+
+pip install apache-libcloud
+...
+Installing collected packages: urllib3, certifi, chardet, idna, requests, apache-libcloud
+```
+
+- Положить в корень ansible плагин gce
+
+  ```bash
+  cd <my_infra>/ansible
+  wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/gce.py
+  chmod a+x gce.py
+  ```
+
+- Создать файл конфигурации заканчивающийся на `.gcp.yml`
+
+  ```yaml
+  plugin: gcp_compute
+  projects:
+    - project-id
+  filters:
+  auth_kind: serviceaccount
+  service_account_file: path/to/account.json
+  groups:
+  app: "'reddit-app' in name"
+  db: "'reddit-db' in name"
+  ```
+
+- Выполнить проверку `ansible-inventory --list -i inventory.gcp.yml`
+
+- Прописать в `ansible.cfg`:
+ ```
+ inventory = ./inventory.gcp.yml
+  ...
+
+ [inventory]
+enable_plugins = gcp_compute
+ ```
+
+- Выполнить проверку `ansible all -m ping`
+
+Пригодится
+
+https://stackoverflow.com/questions/54246047/ansible-gcp-compute-inventory-plugin-groups-based-on-machine-names
+
+http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-based-on-machine-names

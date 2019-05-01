@@ -1,0 +1,13 @@
+plugin: gcp_compute
+projects:
+  - stoked-legend-235310
+filters:
+auth_kind: serviceaccount
+service_account_file: ./secure/gce-serviceaccount-project-stoked-legend-235310-31bf86bcc4a8.json
+groups:
+  app: "'reddit-app' in name"
+  db: "'reddit-db' in name"
+cache: true
+cache_timeout: 3600
+cache_plugin: yaml
+cache_connection: /tmp/ansible-inventory-cache
