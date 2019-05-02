@@ -261,3 +261,11 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
   
   ansible-playbook site.yml
   ```
+
+Пригодится
+
+- список модулей https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html
+- циклы https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html
+
+- получение фактов о сервере https://serverfault.com/questions/638507/how-to-access-host-variable-of-a-different-host-with-ansible ,  https://serverfault.com/questions/723957/ansible-fact-from-another-host
+
