@@ -3,8 +3,16 @@
   hosts: app
   become: true
   vars:
-   db_host: 10.132.0.14
+   db_host_name: "{{ hostvars[groups['db'][0]].name }}"
+   db_host: "{{ hostvars[groups['db'][0]]['networkInterfaces'][0]['networkIP'] }}"
   tasks:
+    - name: Show facts DB server
+      debug: 
+        var: item
+      with_items: 
+        - "{{ db_host_name }}"
+        - "{{ db_host }}"
+
     - name: Add unit file for Puma
       copy:
         src: files/puma.service
