@@ -261,5 +261,3 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
   
   ansible-playbook site.yml
   ```
-
-  
