@@ -8,8 +8,9 @@ packer/variables.json
 *.tfvars
 .terraform/
 
-# ansible
+#ansible
 *.retry
+jdauphant.nginx
 
-# others
+#others
 secure/
