@@ -27,6 +27,7 @@ resource "google_compute_instance" "app" {
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
 
+/* Развертываение приложения закомментировано по заданию ansible-2
   connection {
     type  = "ssh"
     user  = "appuser"
@@ -54,6 +55,7 @@ resource "google_compute_instance" "app" {
     # развертывание
     script = "${path.module}/files/deploy.sh"
   }
+*/
 }
 
 resource "google_compute_firewall" "firewall_puma" {

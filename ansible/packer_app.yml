@@ -1,0 +1,15 @@
+- name: Install Ruby и Bundler
+  # hosts: all - для packer, т.к. при сборке образа нет групп ansible
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Install Ruby и Bundler packages
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+        state: present
+      vars:
+        packages:
+        - ruby-full
+        - ruby-bundler
+        - build-essential

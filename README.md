@@ -154,3 +154,118 @@ https://cloud.google.com/compute/docs/instances/view-ip-address
 https://cloud.google.com/sdk/gcloud/reference/compute/instances/list
 
 https://cloud.google.com/sdk/gcloud/reference/topic/filters
+
+
+
+# ДЗ №11
+
+##Установка плагина GCE
+
+https://docs.ansible.com/ansible/latest/scenario_guides/guide_gce.html
+
+- Создать сервисный аккаунт, скачать закрытый ключ в формате JSON
+
+- Добавить файл  закрытого ключа в формате JSON в `.gitignore`
+
+- установить `pip install requests google-auth`
+
+  ```bash
+  pip install requests google-auth
+  ...
+  Installing collected packages: urllib3, certifi, chardet, idna, requests, cachetools, six, pyasn1, pyasn1-modules, rsa, google-auth
+  
+  
+  pip install apache-libcloud
+  ...
+  Installing collected packages: urllib3, certifi, chardet, idna, requests, apache-libcloud
+  ```
+
+
+- Положить в корень ansible плагин gce
+
+  ```bash
+  cd <my_infra>/ansible
+  wget https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/gce.py
+  chmod a+x gce.py
+  ```
+
+- Создать файл конфигурации заканчивающийся на `.gcp.yml`
+
+  ```yaml
+  plugin: gcp_compute
+  projects:
+    - project-id
+  filters:
+  auth_kind: serviceaccount
+  service_account_file: path/to/account.json
+  groups:
+  app: "'reddit-app' in name"
+  db: "'reddit-db' in name"
+  ```
+
+- Выполнить проверку `ansible-inventory --list -i inventory.gcp.yml`
+
+- Прописать в `ansible.cfg`:
+
+  ```properties
+  inventory = ./inventory.gcp.yml
+  ...
+  
+  [inventory]
+  enable_plugins = gcp_compute
+  ```
+
+- Выполнить проверку `ansible all -m ping`
+
+Пригодится
+
+https://stackoverflow.com/questions/54246047/ansible-gcp-compute-inventory-plugin-groups-based-on-machine-names
+
+http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-based-on-machine-names
+
+## Stage+ansible
+
+- Заменили provisioners на ansible в packer\app.json и packer\db.json
+
+- Собираем новые образы
+
+  ```bash
+  cd path/to/root_infra_repo
+  
+  #app
+  packer validate -var-file=packer/variables.json  ./packer/app.json
+  Template validated successfully.
+  packer build -var-file=packer/variables.json  ./packer/app.json
+  --> googlecompute: A disk image was created: reddit-app-base-1556794474
+  
+  #db
+  packer validate -var-file=packer/variables.json  ./packer/db.json
+  Template validated successfully.
+  packer build -var-file=packer/variables.json  ./packer/db.json
+  --> googlecompute: A disk image was created: reddit-db-base-1556794210
+  ```
+
+- Перезапускаем stage
+
+  ```
+  cd path/to/root_infra_repo/terraform
+  
+  terraform destroy
+  terraform apply
+  ```
+
+- Проигрываем плейбук
+
+  ```bash
+  cd path/to/root_infra_repo/ansible
+  
+  ansible-playbook site.yml
+  ```
+
+Пригодится
+
+- список модулей https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html
+- циклы https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html
+
+- получение фактов о сервере https://serverfault.com/questions/638507/how-to-access-host-variable-of-a-different-host-with-ansible ,  https://serverfault.com/questions/723957/ansible-fact-from-another-host
+
