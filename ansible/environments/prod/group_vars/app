@@ -1,0 +1,2 @@
+# имя файла должно называтьтся как имя группы в инвентори
+db_host: "{{ hostvars[groups['db'][0]]['networkInterfaces'][0]['networkIP'] }}"
