@@ -1,0 +1,5 @@
+---
+# defaults file for app
+db_host_name: "{{ hostvars[groups['db'][0]].name }}"
+db_host: 127.0.0.1
+env: local
