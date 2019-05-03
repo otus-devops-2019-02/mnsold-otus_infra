@@ -269,3 +269,72 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
 
 - получение фактов о сервере https://serverfault.com/questions/638507/how-to-access-host-variable-of-a-different-host-with-ansible ,  https://serverfault.com/questions/723957/ansible-fact-from-another-host
 
+
+
+# ДЗ №13
+
+Пригодится 
+
+- Переменные из yml файла https://www.simonholywell.com/post/2016/02/intelligent-vagrant-and-ansible-files/
+
+  - vagrantvars.yml
+
+  ```yaml
+  nginx_sites:
+    default:
+      - listen 80
+      - server_name "reddit"
+      - location / {
+          proxy_pass http://127.0.0.1:9292;
+        }
+  ```
+
+  - Vagrantfile
+
+  ```ruby
+  Vagrant.configure("2") do |config|
+  
+    require 'yaml'
+    settings = YAML.load_file 'vagrantvars.yml'
+  
+    config.vm.provider :virtualbox do |v|
+      v.memory = 512
+    end
+  ...
+  
+    config.vm.define "appserver" do |app|
+      app.vm.box = "ubuntu/xenial64"
+      app.vm.hostname = "appserver"
+      app.vm.network :private_network, ip: "10.10.10.20"
+  
+      app.vm.provision "ansible" do |ansible|
+        ansible.playbook = "playbooks/site.yml"
+        ansible.groups = {
+          "app" => ["appserver"],
+          "app:vars" => {
+              "db_host": "10.10.10.10"
+          }
+        }
+        ansible.extra_vars = {
+          "deploy_user" => "vagrant",
+          "nginx_sites": settings['nginx_sites']
+        }
+      end
+    end
+  ...
+  end
+  ```
+
+  Еще вариант, добавить в ansible.extra_vars
+
+  ```ruby
+  "nginx_sites" => {"default": 
+  	["listen 80", 
+      'server_name "reddit"',
+      "location / { proxy_pass http://127.0.0.1:9292; }"
+      ]
+  }
+  ```
+
+  
+
