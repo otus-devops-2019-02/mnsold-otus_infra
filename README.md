@@ -419,3 +419,7 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
 
   Пример с сокетом (портом) https://opensource.com/article/18/12/testing-ansible-roles-molecule
 
+- Переменные окружения ansible https://docs.ansible.com/ansible/latest/reference_appendices/config.html
+
+- Передача оружения ansible из packer (через опцию ansible_env_vars) https://www.packer.io/docs/provisioners/ansible.html#ansible_env_vars
+
