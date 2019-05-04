@@ -336,5 +336,79 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
   }
   ```
 
-  
+- Установка модулей Python в virtual env https://docs.python-guide.org/dev/virtualenvs/
 
+  ```bash
+  pip install virtualenv
+  
+  # Посмотреть пользовательскую директорию с пакетами python
+  # в поддиректории bin будут исполняемые файлы, их нужно добавить в PATH
+  python -m site --user-base
+      /home/<myuser>/.local
+  
+  nano ~/.profile
+  -----
+  # set PATH so it includes user's private bin if it exists
+  if [ -d "$HOME/.local/bin" ] ; then
+      PATH="$HOME/.local/bin:$PATH"
+  fi
+  -----
+  
+  # Создать вирт среду venv в директории проекта
+  # добавить каталог venv в .gitignore
+  cd project_folder
+  virtualenv venv
+  #или с нужной версией питона
+  virtualenv -p /usr/bin/python2.7 venv
+  
+  # Активация/дективация/удаление среды
+  # после активации, все пакеты pip будут ставиться в venv
+  source venv/bin/activate
+  deactivate
+  rm -Rf venv/
+  
+  ####################################
+  pip install virtualenvwrapper
+  # virtualenv д.б. уже установлен
+  
+  # Добавить в .profile строки
+  nano ~/.profile
+  -----
+  export WORKON_HOME=$HOME/.virtualenvs
+  source ~/.local/bin/virtualenvwrapper.sh
+  export PROJECT_HOME=$HOME/python_projects
+  -----
+  # WORKON_HOME - указывает virtualenvwrapper, где разместить виртуальные среды
+  # PROJECT_HOME - указывает virtualenvwrapper, где разместить каталоги проектов. Диектория должна существовать до вызова mkproject
+  
+  # Основные комнды
+  # mkvirtualenv project_venv, пример: "mkvirtualenv -p /usr/bin/python2.7 venv27"
+  # workon project_venv, пример: "workon venv27"
+  # rmvirtualenv project_venv
+  # mkproject project_name - создаст проект в PROJECT_HOME, и проект будет приявязан к venv
+  
+  ```
+
+  Установка установка модулей python в виртуальную среду
+
+  ```bash
+  # создание виртуальной среды, активация нужной среды
+  mkvirtualenv -p /usr/bin/python2.7 venv27
+  workon venv27
+  
+  # установка модулей python
+  # скорректировать требования, иначе molecula не ставится
+  nano requirements.txt
+  -----
+  ansible>=2.4
+  python-vagrant>=0.5.15
+  molecule==2.20.1
+  Jinja2==2.10
+  PyYAML==3.13
+  testinfra==1.19.0
+  -----
+  #добавить пакет, иначе ошибка error: command 'x86_64-linux-gnu-gcc' failed with exit status 1 при компиляции psutil
+  sudo apt-get install python-dev
+  
+  pip install -r requirements.txt
+  ```
