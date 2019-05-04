@@ -11,6 +11,7 @@ packer/variables.json
 # ansible
 *.retry
 jdauphant.nginx
+db_role_external
 
 # vagrant & molecule
 .vagrant/

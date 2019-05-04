@@ -423,3 +423,23 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
 
 - Передача оружения ansible из packer (через опцию ansible_env_vars) https://www.packer.io/docs/provisioners/ansible.html#ansible_env_vars
 
+- Установка роли из github
+
+  Основное руководство https://docs.ansible.com/ansible/latest/reference_appendices/galaxy.html
+
+  Добавить запись в ansible/environments/stage|prod/requirements.yml
+
+  ```yaml
+  - src: https://github.com/mnsold-otus/practice_ansible_role-db
+    version: v1.0
+    name: db_role_external
+  ```
+
+  Выполнить установку ролей
+
+  ```bash
+  cd ansible
+  ansible-galaxy install -r environments/stage/requirements.yml
+  ```
+
+  
