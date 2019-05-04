@@ -412,3 +412,10 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
   
   pip install -r requirements.txt
   ```
+
+Пригодится
+
+- Модули молекулы https://testinfra.readthedocs.io/en/latest/modules.html#testinfra.modules.socket.Socket
+
+  Пример с сокетом (портом) https://opensource.com/article/18/12/testing-ansible-roles-molecule
+
