@@ -441,5 +441,3 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
   cd ansible
   ansible-galaxy install -r environments/stage/requirements.yml
   ```
-
-  
