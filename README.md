@@ -269,3 +269,175 @@ http://qaru.site/questions/16876394/ansible-gcpcompute-inventory-plugin-groups-b
 
 - получение фактов о сервере https://serverfault.com/questions/638507/how-to-access-host-variable-of-a-different-host-with-ansible ,  https://serverfault.com/questions/723957/ansible-fact-from-another-host
 
+
+
+# ДЗ №13
+
+Пригодится 
+
+- Переменные из yml файла https://www.simonholywell.com/post/2016/02/intelligent-vagrant-and-ansible-files/
+
+  - vagrantvars.yml
+
+  ```yaml
+  nginx_sites:
+    default:
+      - listen 80
+      - server_name "reddit"
+      - location / {
+          proxy_pass http://127.0.0.1:9292;
+        }
+  ```
+
+  - Vagrantfile
+
+  ```ruby
+  Vagrant.configure("2") do |config|
+  
+    require 'yaml'
+    settings = YAML.load_file 'vagrantvars.yml'
+  
+    config.vm.provider :virtualbox do |v|
+      v.memory = 512
+    end
+  ...
+  
+    config.vm.define "appserver" do |app|
+      app.vm.box = "ubuntu/xenial64"
+      app.vm.hostname = "appserver"
+      app.vm.network :private_network, ip: "10.10.10.20"
+  
+      app.vm.provision "ansible" do |ansible|
+        ansible.playbook = "playbooks/site.yml"
+        ansible.groups = {
+          "app" => ["appserver"],
+          "app:vars" => {
+              "db_host": "10.10.10.10"
+          }
+        }
+        ansible.extra_vars = {
+          "deploy_user" => "vagrant",
+          "nginx_sites": settings['nginx_sites']
+        }
+      end
+    end
+  ...
+  end
+  ```
+
+  Еще вариант, добавить в ansible.extra_vars
+
+  ```ruby
+  "nginx_sites" => {"default": 
+  	["listen 80", 
+      'server_name "reddit"',
+      "location / { proxy_pass http://127.0.0.1:9292; }"
+      ]
+  }
+  ```
+
+- Установка модулей Python в virtual env https://docs.python-guide.org/dev/virtualenvs/
+
+  ```bash
+  pip install virtualenv
+  
+  # Посмотреть пользовательскую директорию с пакетами python
+  # в поддиректории bin будут исполняемые файлы, их нужно добавить в PATH
+  python -m site --user-base
+      /home/<myuser>/.local
+  
+  nano ~/.profile
+  -----
+  # set PATH so it includes user's private bin if it exists
+  if [ -d "$HOME/.local/bin" ] ; then
+      PATH="$HOME/.local/bin:$PATH"
+  fi
+  -----
+  
+  # Создать вирт среду venv в директории проекта
+  # добавить каталог venv в .gitignore
+  cd project_folder
+  virtualenv venv
+  #или с нужной версией питона
+  virtualenv -p /usr/bin/python2.7 venv
+  
+  # Активация/дективация/удаление среды
+  # после активации, все пакеты pip будут ставиться в venv
+  source venv/bin/activate
+  deactivate
+  rm -Rf venv/
+  
+  ####################################
+  pip install virtualenvwrapper
+  # virtualenv д.б. уже установлен
+  
+  # Добавить в .profile строки
+  nano ~/.profile
+  -----
+  export WORKON_HOME=$HOME/.virtualenvs
+  source ~/.local/bin/virtualenvwrapper.sh
+  export PROJECT_HOME=$HOME/python_projects
+  -----
+  # WORKON_HOME - указывает virtualenvwrapper, где разместить виртуальные среды
+  # PROJECT_HOME - указывает virtualenvwrapper, где разместить каталоги проектов. Диектория должна существовать до вызова mkproject
+  
+  # Основные комнды
+  # mkvirtualenv project_venv, пример: "mkvirtualenv -p /usr/bin/python2.7 venv27"
+  # workon project_venv, пример: "workon venv27"
+  # rmvirtualenv project_venv
+  # mkproject project_name - создаст проект в PROJECT_HOME, и проект будет приявязан к venv
+  
+  ```
+
+  Установка установка модулей python в виртуальную среду
+
+  ```bash
+  # создание виртуальной среды, активация нужной среды
+  mkvirtualenv -p /usr/bin/python2.7 venv27
+  workon venv27
+  
+  # установка модулей python
+  # скорректировать требования, иначе molecula не ставится
+  nano requirements.txt
+  -----
+  ansible>=2.4
+  python-vagrant>=0.5.15
+  molecule==2.20.1
+  Jinja2==2.10
+  PyYAML==3.13
+  testinfra==1.19.0
+  -----
+  #добавить пакет, иначе ошибка error: command 'x86_64-linux-gnu-gcc' failed with exit status 1 при компиляции psutil
+  sudo apt-get install python-dev
+  
+  pip install -r requirements.txt
+  ```
+
+Пригодится
+
+- Модули молекулы https://testinfra.readthedocs.io/en/latest/modules.html#testinfra.modules.socket.Socket
+
+  Пример с сокетом (портом) https://opensource.com/article/18/12/testing-ansible-roles-molecule
+
+- Переменные окружения ansible https://docs.ansible.com/ansible/latest/reference_appendices/config.html
+
+- Передача оружения ansible из packer (через опцию ansible_env_vars) https://www.packer.io/docs/provisioners/ansible.html#ansible_env_vars
+
+- Установка роли из github
+
+  Основное руководство https://docs.ansible.com/ansible/latest/reference_appendices/galaxy.html
+
+  Добавить запись в ansible/environments/stage|prod/requirements.yml
+
+  ```yaml
+  - src: https://github.com/mnsold-otus/practice_ansible_role-db
+    version: v1.0
+    name: db_role_external
+  ```
+
+  Выполнить установку ролей
+
+  ```bash
+  cd ansible
+  ansible-galaxy install -r environments/stage/requirements.yml
+  ```

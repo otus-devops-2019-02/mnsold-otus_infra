@@ -1,16 +1,25 @@
-#packer
+# packer
 packer/variables.json
 
-#terraform
+# terraform
 *.tfstate
 *.tfstate.*.backup
 *.tfstate.backup
 *.tfvars
 .terraform/
 
-#ansible
+# ansible
 *.retry
 jdauphant.nginx
+db_role_external
 
-#others
+# vagrant & molecule
+.vagrant/
+*.log
+*.pyc
+.molecule
+.cache
+.pytest_cache
+
+# others
 secure/
